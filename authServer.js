@@ -26,19 +26,16 @@ app.delete('/logout', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-
-    
-
     const user = { origin: "http://localhost:3000/", ipOrigin: "192.168.0.21", secretKey: "1234" };
-
+    const creationTime = Date.now();
     const acessToken = generateAccessToken(user);
     const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
     refreshTokens.push(refreshToken);
-    res.json({ acessToken: acessToken, refreshToken: refreshToken });
+    res.json({ acessToken: acessToken, refreshToken: refreshToken, expirationTime: 18000000, creationTime: creationTime });
 });
 
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1500s' });
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '18000s' });
 }
 
 app.listen(5000);
